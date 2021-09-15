@@ -21,8 +21,7 @@ def clac(mapseed, blockx, blockz):
     fourth = mulandmask(third)
     j = (np.left_shift(np.right_shift(third, 16), 32) + np.right_shift(np.left_shift(fourth, 16), 32)) | 1
 
-    temp = ((((16 * blockx * i + 16 * blockz * j) ^ mapseed) + 60009) ^ mul) & mask
-    print(temp)
+    temp = int(((((16 * blockx * i + 16 * blockz * j) ^ mapseed) + 60009) ^ mul) & mask)
     relativex = np.right_shift(mulandmask(temp), 44)
     relativez = np.right_shift(mulandmask(mulandmask(temp)), 44)
 
@@ -34,6 +33,9 @@ def clac(mapseed, blockx, blockz):
 
 if __name__ == '__main__':
     seed = int(input("Please input map seed:"))
-    x = int(input("Please input x for Block:"))
-    z = int(input("Please input z for Block:"))
-    print(clac(seed, x, z))
+    x = int(input("Please input x:"))
+    blockx = int(x/16)
+    z = int(input("Please input z:"))
+    blockz = int(z/16)
+    print(clac(seed, blockx, blockz))
+    input("按任意键退出...")
