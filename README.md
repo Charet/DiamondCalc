@@ -14,7 +14,7 @@ python依赖包:numpy
 
 # 效果实验
 
-![20210829100143](.\img\20210829100143.png)
+![20210829100143](https://github.com/Charet/DiamondCalc/blob/master/img/20210829100143.png?raw=true)
 
 什么嘛算~~(she)~~的还挺准的嘛
 
