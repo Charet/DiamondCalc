@@ -1,4 +1,4 @@
-# 这是一个我的世界钻石计算器,游戏适用版本为1.16.5 java版
+# 这是一个我的世界钻石计算器,游戏适用版本为1.16/1.17 java版
 # 思路来源于B站up主一只冰迷的视频https://www.bilibili.com/video/BV1nU4y1E7Ja
 import numpy as np
 
@@ -10,7 +10,7 @@ def mulandmask(a):
     return a * mul + 11 & mask
 
 
-def clac(mapseed, blockx, blockz):
+def diamondclac(mapseed, blockx, blockz, ver):
     temp = mapseed ^ mul & mask
 
     first = mulandmask(temp)
@@ -21,7 +21,7 @@ def clac(mapseed, blockx, blockz):
     fourth = mulandmask(third)
     j = (np.left_shift(np.right_shift(third, 16), 32) + np.right_shift(np.left_shift(fourth, 16), 32)) | 1
 
-    temp = int(((((16 * blockx * i + 16 * blockz * j) ^ mapseed) + 60009) ^ mul) & mask)
+    temp = ((((16 * blockx * i + 16 * blockz * j) ^ mapseed) + ver) ^ mul) & mask
     relativex = np.right_shift(mulandmask(temp), 44)
     relativez = np.right_shift(mulandmask(mulandmask(temp)), 44)
 
@@ -31,11 +31,31 @@ def clac(mapseed, blockx, blockz):
     return diamondx, diamondz
 
 
+def lazulicalc(seed, blockx, blockz, ver):
+    lazulix, diamondz = diamondclac(seed, blockx, blockz, ver)
+    if diamondz % 16 < 4:
+        lazuliz = diamondz + 16 - 4 + (diamondz % 16)
+    else:
+        lazuliz = diamondz - 4
+    return lazulix, lazuliz
+
+
 if __name__ == '__main__':
+    while True:
+        version = float(input("Please input game version:"))
+        if version == 1.16:
+            ver = 60009
+            break
+        elif version == 1.17:
+            ver = 60011
+            break
+        else:
+            print("[Error]:Please input 1.16 or 1.17.")
     seed = int(input("Please input map seed:"))
     x = int(input("Please input x:"))
-    blockx = int(x/16)
+    blockx = int(x / 16)
     z = int(input("Please input z:"))
-    blockz = int(z/16)
-    print(clac(seed, blockx, blockz))
-    input("按任意键退出...")
+    blockz = int(z / 16)
+    print("Diamond:", diamondclac(seed, blockx, blockz, int(ver)))
+    print("Lazuli:", lazulicalc(seed, blockx, blockz, int(ver)))
+    input("按Enter退出...")
